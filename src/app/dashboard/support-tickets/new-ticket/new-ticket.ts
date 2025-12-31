@@ -1,4 +1,4 @@
-import { Component, ElementRef, viewChild, ViewChild } from '@angular/core';
+import { afterEveryRender, afterNextRender, AfterViewInit, Component, ElementRef, viewChild, ViewChild } from '@angular/core';
 import { Button } from "../../../shared/button/button";
 import { Control } from "../../../shared/control/control";
 import { FormsModule } from "@angular/forms";
@@ -9,9 +9,28 @@ import { FormsModule } from "@angular/forms";
   templateUrl: './new-ticket.html',
   styleUrl: './new-ticket.css',
 })
-export class NewTicket {
+export class NewTicket implements AfterViewInit {
+  ngAfterViewInit(): void {
+    throw new Error('Method not implemented.');
+  }
   @ViewChild('form') form?:ElementRef<HTMLFormElement>
    private form3=viewChild.required<ElementRef<HTMLFormElement>>('form');
+
+   constructor(){
+    // Log the form element after every render cycle
+    afterEveryRender(() => {
+      console.log(this.form3);
+    });
+    // Log the form element after the next render cycle
+    afterNextRender(() => {
+      console.log(this.form3);
+    });
+  }
+  
+  ngAfterContentInit(): void {
+    console.log(this.form3);
+  }
+
 onSubmit(title: string,ticketText:string){
   console.log(title);
   console.log(ticketText);
